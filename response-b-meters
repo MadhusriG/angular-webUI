@@ -1,0 +1,44 @@
+{
+	"PanelConfig":	{
+		"Type":	"BCM_Std1",
+		"OnOff":	"On",
+		"VoltSource":	1.00,
+		"VoltRating":	120.00,
+		"AmpRating":	225.00,
+		"FreqRating":	60.00
+	},
+	"Genaral":	{
+		"Latch":	"Off",
+		"PanelAlarms":	"On"
+	}
+}
+/getdata.cgi?meters?PanelConfig/submeters/7/2
+{
+	"PanelConfig":	{
+		"Type":	"SF_WithoutN",
+		"OnOff":	"Off",
+		"VoltSource":	0.00,
+		"VoltRating":	1.00,
+		"AmpRating":	120.00,
+		"FreqRating":	60.00
+	},
+	"Genaral":	{
+		"Latch":	"Off",
+		"PanelAlarms":	"On"
+	}
+}
+getdata.cgi?meters?PanelConfig/submeters/7/1
+{
+	"PanelConfig":	{
+		"Type":	"BCM_Std1",
+		"OnOff":	"On",
+		"VoltSource":	1.00,
+		"VoltRating":	120.00,
+		"AmpRating":	225.00,
+		"FreqRating":	60.00
+	},
+	"Genaral":	{
+		"Latch":	"Off",
+		"PanelAlarms":	"On"
+	}
+}
