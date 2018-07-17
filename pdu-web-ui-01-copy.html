@@ -53,16 +53,29 @@
             color: #fff;
             text-align: center;
             position: absolute;
-            left: 29.65%;
+            left: 21.5%;
             top: 50%;
         }
         /* position of sfcm label */
         .sfcm-label{
             text-align: center;
             position: absolute;
-            left: 34.65%;
+            left: 36.25%;
             top: 67%;
             font-size: 10px;                
+        }
+        /* on hover of PDU, show the information */
+        /* only for large screen view */
+        .pdu-hover-info{
+            position: absolute;
+            top: 25%;
+            font-size: 1.5em; 
+        }
+        .pdu-hover-info div.col-xs-6 > ul{
+            padding-bottom: 100%;    
+        } 
+        .pdu-hover-info ul.second-col-info{
+            padding-left: 45%;    
         }
     </style>
             </head>
@@ -77,11 +90,41 @@
                                 <div id="bs-container" class="bs-columns-container">
                                 </div>
                             </div>
+                            <div class="row pdu-hover-info-row" id="pduHoverDiv">
+                                <div class="col-sm-4 col-sm-push-4 pdu-hover-info">
+                                   <div class="col-xs-6">
+                                       <ul class="list-unstyled">
+                                            <li>204V</li>
+                                            <li>203V</li>
+                                            <li>201V</li>
+                                        </ul>
+                                        <ul class="list-unstyled">
+                                            <li>1V</li>
+                                            <li>0V</li>
+                                            <li>0V</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <ul class="list-unstyled invisible">
+                                            <li>226A</li>
+                                            <li>223A</li>
+                                            <li>199A</li>
+                                        </ul> 
+                                        <ul class="list-unstyled second-col-info">
+                                            <li>226A</li>
+                                            <li>223A</li>
+                                            <li>200A</li>
+                                        </ul> 
+                                    </div>
+                                </div>
+                            </div>
+                            
                         </div>
                         <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2" id="right-bar"></div>
                     </div>
                 </div>
                 <script>
+        $('#pduHoverDiv').hide();
         var circuitContainer = document.getElementById("main-svg-container");
         var pduContainer = document.getElementById("pdu-container");
         var bsContainer = document.getElementById("bs-container");
@@ -238,7 +281,26 @@
                     bottomRightCurve3.setAttribute("style","display:inline;opacity:1;fill:#ffffff;fill-opacity:1;"); //Set path's styles
                     pduBottomRightCurveGroup.appendChild(bottomRightCurve1);                    pduBottomRightCurveGroup.appendChild(bottomRightCurve2);
                     pduBottomRightCurveGroup.appendChild(bottomRightCurve3);
-
+                    //voltage symbol: START
+                    var pduVoltageSign = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+                    pduVoltageSign.setAttribute("d","m 61.232141,60.764882 -9.378412,0.122962 4.582717,-8.183423 z");
+                    pduVoltageSign.setAttribute("style","opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:0.61626506;");
+                    pduVoltageSign.setAttribute("transform","matrix(1.0118631,0,0,1.2312215,-26.963536,47.692866)");
+                    svg_pdu.appendChild(pduVoltageSign);
+                    //voltage symbol : END
+                    //letter Y : START
+                    var pduYLetter = document.createElementNS("http://www.w3.org/2000/svg",'text');
+                    pduYLetter.setAttribute("style","font-size:16px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;");
+                    pduYLetter.setAttribute("transform","scale(1.0028955,0.99711289)");
+                    pduYLetter.setAttribute("x",'25.997938');
+                    pduYLetter.setAttribute("y",'163.35176');
+                    svg_pdu.appendChild(pduYLetter);
+                    var pduYLetterText = document.createElementNS("http://www.w3.org/2000/svg",'tspan');
+                    pduYLetterText.setAttribute("id",'pduLabelText');
+                    pduYLetter.appendChild(pduYLetterText);
+                    pduLabelText.textContent = "Y";
+                    pduYLetterText.setAttribute("style","fill:#ffffff;fill-opacity:1;stroke-width:0.40014985");
+                    //letter Y : END
                     return svg_pdu;
                 }
 
@@ -328,7 +390,6 @@
                     pduContainer.appendChild(svg_pduWithLine);
                     //pdu middle lines
                     var pduWithLineGroup = document.createElementNS("http://www.w3.org/2000/svg", 'g'); //Create a defs in SVG's namespace
-                    pduWithLineGroup.setAttribute("id","pdu-with-line"); //Set g's id
                     svg_pduWithLine.appendChild(pduWithLineGroup);
                     var middleLine1 = document.createElementNS("http://www.w3.org/2000/svg", 'path');
                     middleLine1.setAttribute("d"," M 73.424044,73.59191 C 131.79521,72.875583 133.0029,73.233743 133.0029,73.233743 h -0.80512"); //Set path's data
@@ -418,6 +479,25 @@
                     bottomRightCurve3.setAttribute("style","display:inline;opacity:1;fill:#ffffff;fill-opacity:1;"); //Set path's styles
                     pduBottomRightCurveGroup.appendChild(bottomRightCurve1);                    pduBottomRightCurveGroup.appendChild(bottomRightCurve2);
                     pduBottomRightCurveGroup.appendChild(bottomRightCurve3);
+                    //voltage and letter Y symbols: START
+                    var pduVoltageSign = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+                    pduVoltageSign.setAttribute("id","pduVoltage");
+                    pduVoltageSign.setAttribute("d","m 61.232141,60.764882 -9.378412,0.122962 4.582717,-8.183423 z");
+                    pduVoltageSign.setAttribute("style","opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:0.61626506;");
+                    pduVoltageSign.setAttribute("transform","matrix(0.6692784,0,0,0.82590072,27.986742,17.654586)");
+                    svg_pduWithLine.appendChild(pduVoltageSign);
+                    var pduYLetter = document.createElementNS("http://www.w3.org/2000/svg",'text');
+                    pduYLetter.setAttribute("style","font-size:8px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;");
+                    pduYLetter.setAttribute("transform","scale(0.94756847,1.0553327)");
+                    pduYLetter.setAttribute("x",'66.86174');
+                    pduYLetter.setAttribute("y",'84.010979');
+                    svg_pduWithLine.appendChild(pduYLetter);
+                    var pduYLetterText = document.createElementNS("http://www.w3.org/2000/svg",'tspan');
+                    pduYLetterText.setAttribute("id",'pduLabelText');
+                    pduYLetter.appendChild(pduYLetterText);
+                    pduLabelText.textContent = "Y";
+                    pduYLetterText.setAttribute("style","fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.40014985");
+                    //voltage and letter Y symbols: END
                     //connector line
                     var pduConnectorLine = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
                     pduConnectorLine.setAttribute("y","124.38097");                   
@@ -435,7 +515,7 @@
                     $("svg.bcm").after($bcmLabelSpan);
                 }
                 function svg_sfcmLabel(){
-                    var $sfcmLabelSpan = $( "<span class='sfcm-label'>SFCM 24/1</span>" );
+                    var $sfcmLabelSpan = $( "<span class='sfcm-label'>SF 1</span>" );
                     //var $bcmIdNumSpan = $( "<span class='bcm-id'>7/1</span>" );
                     $("svg.sfcm").after($sfcmLabelSpan);
                 }
@@ -449,14 +529,22 @@
                     //create svgs START
                     for(var i=0;i < objBCM.length;i++){
                         svg_bcmLoad();
-                        //svg_bcmLabel();
+                        svg_bcmLabel();
                     }
                     for(var i=0;i < objSFCM.length;i++){
                         svg_sfcmLoad();svg_sfcmLabel();
                     }
                 }
                 //create svgs END
-
+                    
+                //Code to show the information on hover of PDU with line: START
+                $("#pduVoltage").hover(function(){
+                    $('#pduHoverDiv').show();
+                },function(){
+                    $('#pduHoverDiv').hide();
+                });
+                //Code to show the information on hover of PDU with line: END
+                    
                 // Code to identify number of BCM and SFCM elements from the device array: START
                 var bcmAndSfcm = 0;
                 for (var i = deviceStatusArr.length - 1; i >= 0; i--)
@@ -496,13 +584,16 @@
                     for (var i = deviceStatusArr.length - 1; i >= 0; i--) {
                         var element = deviceStatusArr[i];
                         if(element["devciestatus"] === "ALARM"){
-                            $(this).attr("style","stroke: red;stroke-width:0.65;");
+                            $("svg.bcm").attr("style","stroke: red;stroke-width:0.65;");
+                            $("svg.sfcm").attr("style","stroke: red;stroke-width:0.65;");
                         }
                         else if(element["devciestatus"] === "WARNING"){
-                            $(this).attr("style","stroke: orange;stroke-width:0.65;");
+                            $("svg.bcm").attr("style","stroke: orange;stroke-width:0.65;");
+                            $("svg.sfcm").attr("style","stroke: orange;stroke-width:0.65;");
                         }
                         else{
-                          $(this).attr("style","stroke: green;stroke-width:0.65;");  
+                          $("svg.bcm").attr("style","stroke: green;stroke-width:0.65;");  
+                          $("svg.sfcm").attr("style","stroke: green;stroke-width:0.65;");  
                         }
                     }
                     
