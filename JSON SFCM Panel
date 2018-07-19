@@ -1,0 +1,18 @@
+{
+	"Config":	{
+		"On-Off":	"On",
+		"VoltRating":	120.00,
+		"FreqRating":	60.00,
+		"SrcOption":	1.00,
+		"Latch":	"Off",
+		"SubfeedType":	5.00,
+		"AdvPQ":	"On",
+		"SensingLNLL":	"LN"
+	},
+	"Info":	{
+		"ID":	24.00,
+		"MajVersion":	3.00,
+		"MinVersion":	25.00,
+		"Baud":	"115200"
+	}
+}
