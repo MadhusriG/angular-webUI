@@ -1,0 +1,24 @@
+        #main-svg-container{      
+          position: relative;    
+          width: 100%;    
+/*          margin-left:auto;*/
+/*          margin-right:auto;*/
+          margin-left: 8.335%;
+          margin-right: 8.335%;
+          margin-bottom: 20px;
+        } 
+        #pdu-container svg.pdu:first-child{
+            display: none !important;   
+        }
+        .bs-columns-container{
+          width: 100% !important;
+          margin-top: -1.5%;
+          position: relative;
+          display: flex;  flex-wrap: nowrap;align-items: center;
+          margin-left: -12.5%;
+        }
+        .bs-columns-container .bcmWrapper > svg,
+        .bs-columns-container .sfcmWrapper > svg{
+          max-height: 250px;
+          width: 200%;
+        }
