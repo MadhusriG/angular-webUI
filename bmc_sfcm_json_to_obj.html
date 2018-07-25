@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p id="device"></p>
+
+<script>
+	var bcmJsonResponse = '{"PanelConfig":{"Type":"BCM_Std1","OnOff":"Off","VoltSource":1.00,"VoltRating":120.00,"AmpRating":225.00,"FreqRating":60.00},"Genaral":{"Latch":"Off","PanelAlarms":"On"}}';
+
+	var sfcmJsonResponse = '{"Config":{"On-Off":"Off","VoltRating":120.00,"FreqRating":60.00,"SrcOption":1.00,"Latch":"Off","SubfeedType":5.00,"AdvPQ":"On","SensingLNLL":"LN"},"Info":{"ID":24.00,"MajVersion":3.00,"MinVersion":25.00,"Baud":"115200"}}'; 
+
+	var devicesObjArr = [];
+	var devices = [];
+	var device = {
+		id: "",
+		type: "",
+		OnOff: "",
+		Alarm: ""
+	}
+
+	identifyBCM(bcmJsonResponse);
+	identifySFCM(sfcmJsonResponse);
+
+	function identifyBCM(jsonResponse)
+	{
+		var response = JSON.parse(jsonResponse);
+		console.log("BCM On/Off: "+response["PanelConfig"].OnOff);
+	}
+
+	function identifySFCM(jsonResponse)
+	{
+		var response = JSON.parse(jsonResponse);
+		console.log("SFCM On/Off: "+response["Config"]["On-Off"]);	
+	}
+
+</script>
+
+</body>
+</html>
