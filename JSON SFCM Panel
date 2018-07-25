@@ -1,3 +1,5 @@
+http://10.140.168.50/getdata.cgi?meters?SubfeedSystemData/submeters/24/2
+On-Off is ON
 {
 	"Config":	{
 		"On-Off":	"On",
