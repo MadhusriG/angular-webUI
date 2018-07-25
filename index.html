@@ -12,7 +12,8 @@
 	<link rel="stylesheet" href="dist/angular/xeditable.css">
 	<link rel="stylesheet" href="dist/bootstrap/bootstrap-switch.css">
 	<link rel="stylesheet" href="dist/angular/angular-range-slider.css">
-	<link rel="stylesheet" href="css/style.css">	
+	<link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/ms-home-style.css">
 	<script src="dist/jquery/jquery.min.js"></script>
 	<script src="dist/bootstrap/bootstrap-switch.js"></script>
 	<script src="dist/angular/angular.js"></script>
@@ -63,7 +64,7 @@
 			</div>
 
 			<!-- Side Panel -->
-			<div class="pdu-home-row1 pdu-home-col4" id="side-panel-id">
+			<div class="pdu-home-row1 pdu-home-col4" id="side-panel-id" style="height: calc(100vh);">
 				<div class="pdu-metering-side-panel">	
 					<table class="table pdu-metering-side-panel-table">
 						<tbody>
@@ -77,7 +78,7 @@
 									<img class="logo" src="./images/ABB_Logo_Screen_RGB_25px_@1x.png">
 								</td>
 							</tr>
-							<tr>
+							<!--<tr>
 								<td class="pdu-metering-side-panel-content" colspan="2" style="background:#222222; border:0;">											
 									<div>								
 										<table style="background:#222222; margin-bottom:0;" class="table">
@@ -91,7 +92,7 @@
 										</tbody></table>
 									</div>
 								</td>
-							</tr>
+							</tr>-->
 						</tbody>				
 					</table>
 				</div>
@@ -152,13 +153,102 @@
 						</tbody>				
 					</table>
 				</div>
+                <div class="pdu-metering-side-panel">
+                    <table class="table pdu-metering-side-panel-table">
+                        <tbody>
+                            <tr class="pdu-metering-home-status-panel-header">
+                                <td class="pdu-metering-home-status-panel-header-left" style="background:#222222; border:0">
+                                    <div>
+                                        Load
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>						
+                                <td class="pdu-metering-home-status-panel-content" colspan="2" style="background:#222222; border:0;">
+                                    <div><!--  style="margin-top: calc(1vh);" -->
+                                        <canvas ng-if="showPie" width="90px" height="90px" id="pduPieChart" class="chart chart-doughnut mini-canvas" chart-options="optionspie" chart-data="datapie" chart-labels="labelspie" chart-colors="colorspie"></canvas>
+                                    </div>	
+                                    <div style="background:#222222; color: #858585; margin-top: -5px; margin-bottom: 5%;width: 100%;text-align: center;" class="table">								
+                                        <table style="/* width: 100%; */margin-bottom: 0px;display: inline-block;">
+                                            <tbody><tr>														
+                                                <td class="col-xs-1" style="font-family: HelveticaNeueETPro-Light;/* float:right; */font-size: 10px;/* padding-left: 20%; */">
+                                                    0
+                                                </td>
+                                                <td class="col-xs-12" style="font-family: HelveticaNeueETPro-Light;font-size: 10px;/* padding-right: 10px; */float: right;">
+                                                    100
+                                                </td>
+                                            </tr>
+                                        </tbody></table>
+                                    </div>									
+                                    <div style="background:#222222;" class="table">	
+                                        <table style="width: 100%;">
+                                            <tr>
+                                                <td style="text-align: center; font-family: HelveticaNeueETPro-Light; color: #858585;">
+                                                    Load Power
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>				
+                    </table>
+                </div>
+                <div class="pdu-metering-side-panel">
+                    <table class="table pdu-metering-side-panel-table">
+                        <tbody>
+                            <tr>
+                                <td class="pdu-metering-home-status-panel-header-left" style="background:#222222; border:0">
+                                    <div>
+                                        Energy
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>		
+                                <td class="pdu-metering-home-status-panel-content" colspan="2" style="background:#222222; border:0; text-align: center;height: 100%;padding: 0 0 10px">
+
+                                        <div style="background:#222222;margin-bottom: 0px;" class="table">								
+                                        <table style="width: 100%; margin-bottom: 0px;">
+                                            <tr>
+                                                <td style="text-align: center; font-size: 30px;color:#d2d2d2; ">
+                                                    {{energy.kWh.Total}}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>			
+                            </tr>
+                            <tr>
+                                <td class="pdu-metering-home-status-panel-header-left" style="background:#222222; border:0">
+                                    <div>
+                                        Max Demand
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>		
+                                <td class="pdu-metering-home-status-panel-content" colspan="2" style="background:#222222; border:0; text-align: center; height: 100%;padding: 0 0 10px">
+
+                                        <div style="background:#222222;margin-bottom: 0px;" class="table"><!-- margin-top: calc(3vh) -->								
+                                        <table style="width: 100%; margin-bottom: 0px;">
+                                            <tr>
+                                                <td style="text-align: center; font-size: 30px;color:#d2d2d2; ">
+                                                    {{energy.Demand.MD}}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>			
+                            </tr>
+                        </tbody>				
+                    </table>
+                </div>
 				<div class="pdu-metering-side-panel pdu-metering-side-panel-service">	
-					<table class="table pdu-metering-side-panel-table" style="height: 100%">
+					<table class="table pdu-metering-side-panel-table" style="">
 						<tbody>									
 							<tr>
-								<td class="pdu-metering-side-panel-content" colspan="2" style="background:#222222; border:0; padding-top:15px; vertical-align: bottom; padding-bottom: 0px;">											
+								<td class="pdu-metering-side-panel-content" colspan="2" style="background:#222222; border:0; padding-top:65%; vertical-align: bottom; padding-bottom: 0px;">											
 									<div>								
-										<table style="background:#222222; margin-bottom:0;" class="table">																										
+										<table style="background:#222222;" class="table">																										
 											<tbody>
 												<tr>
 													<td class="col-xs-6 pdu-metering-side-panel-content-left">	
