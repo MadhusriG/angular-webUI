@@ -1,17 +1,16 @@
-<div ng-controller="PduMeteringHomeController">	
+<div ng-controller="newHomeController">	
 	<div class="header-layout clearfix"  style="border: #d8d8d8 1px solid; background: #ffffff; box-shadow: 0px 2px 5px #d8d8d8;">  
 		{{titleHeader}}
 	</div>
     <div class="row" style="width: calc(100vw - 315px);">
-        <div class="col-md-10">
-            <h4 style="color:#d2d2d2;margin-left:1.5%;">Power Distribution Mimic</h4>
+        <div class="col-md-10 center-block">
+            <h6 style="color:#d2d2d2;margin-left:2%;">Mimic</h6>
             <div id="main-svg-container">
                 <div id="pdu-container"></div>
-                <div id="bs-container" class="bs-columns-container">
-                </div>
+                <div id="bs-container" class="bs-columns-container"></div>
             </div>
         </div>
-        <div class="col-md-2 pdu-metering-side-panel">
+        <!--<div class="col-md-2 pdu-metering-side-panel">
             <table class="table pdu-metering-side-panel-table" style="visibility: hidden;margin-bottom: 10px;">
                 <tbody>
                     <tr class="pdu-metering-home-status-panel-header">
@@ -179,6 +178,6 @@
                     </tr>
                 </tbody>				
             </table>
-        </div>	
+        </div>-->	
     </div>
 </div>
