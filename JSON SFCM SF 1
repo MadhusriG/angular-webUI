@@ -1,3 +1,5 @@
+http://10.140.168.50/getdata.cgi?meters?SubfeedFactoryConfig/submeters/24/2/1
+LineCTScale > 0
 {
 	"SubfeedFactoryConfig":	{
 		"LineCTScale":	16.00,
