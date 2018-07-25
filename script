@@ -493,8 +493,52 @@ app.controller('newHomeController', function ($scope, $http, $timeout, $location
     $interval.cancel($rootScope.dumpStatusPromise);
 	$interval.cancel($rootScope.upgradeStatusPromise);
 	$rootScope.titleHeader = 'Power Distribution';
+	$rootScope.sfcmCount = 0;
 	
-    
+	// MADDY -- Start
+	// 1. Invoke identifySubFeeder(subFeederId)
+	// 2. Check sfcmPanelRequestURI, sfcmPanelFactoryConfigURI.
+	// 3. Write failure function
+	// 4. Debug responses (as expected)
+	// 5. expression $sfcmPanelResponse.Config["On-Off"] syntax
+	// 6. expression isCTScaleNonZero ? sfcmCount++ : sfcmCount syntax
+    $scope.identifySubFeeder = function($subFeederId) {
+    	var sfcmPanelRequestURI = 'http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/'+$subFeederId+'/';
+    	for (int panelId = 1; panelId <= 4; panelId++)
+    	{
+    		sfcmPanelRequestURI = sfcmPanelRequestURI.concat(panelId);
+    		$http.get(sfcmPanelRequestURI)
+    			.success(function(sfcmPanelResponse){
+    				var isSFCMPanelOn = parseSFCMPanelResponseOnOff(sfcmPanelResponse);
+    				identifySubFeederOnCTScale($subFeederId, panelId);
+    			})
+    	}
+    }
+
+    $scope.parseSFCMPanelResponseOnOff = function($sfcmPanelResponse) {
+    	return $sfcmPanelResponse.Config["On-Off"] === "On";
+    }
+
+    $scope.identifySubFeederOnCTScale = function($subFeederId, $sfcmPanelOnId) {
+		var sfcmPanelFactoryConfigURI = 'http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?SubfeedFactoryConfig/submeters/'+$subFeederId+'/'+$sfcmPanelOnId+'/';
+		for (int i = 1; i <= 14; i++)
+		{
+			sfcmPanelFactoryConfigURI = sfcmPanelFactoryConfigURI.concat(i);
+			$http.get(sfcmPanelFactoryConfigURI)
+    			.success(function(sfcmPanelFactoryConfigResponse) {
+    				var isCTScaleNonZero = parseSFCMPanelFactoryConfigResponse(sfcmPanelFactoryConfigResponse);
+    				isCTScaleNonZero ? sfcmCount++ : sfcmCount;
+    			})
+		}
+
+	}
+
+    $scope.parseSFCMPanelFactoryConfigResponse = function($sfcmPanelFactoryConfigResponse) {
+    	return $sfcmPanelFactoryConfigResponse.SubfeedFactoryConfig.LineCTScale != 0;
+    }
+
+	// MADDY -- End
+
     //service or function to draw the SVG mimic: START
     $scope.invokeDeviceStatusService = function(){
 		$http.get('http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?devicestatus')
@@ -516,6 +560,7 @@ app.controller('newHomeController', function ($scope, $http, $timeout, $location
                             break;
                         case "BCM":
                             //$scope.objBCM.push($scope.element);
+                            
                             $http.get('http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/'+parseInt($rootScope.deviceStatusArr[i].Id)+'/1')
                                 .success(function(response) {
 
