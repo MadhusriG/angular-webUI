@@ -494,73 +494,64 @@ app.controller('newHomeController', function ($scope, $http, $timeout, $location
 	$interval.cancel($rootScope.upgradeStatusPromise);
 	$rootScope.titleHeader = 'Power Distribution';
 	$rootScope.sfcmCount = 0;
-	
-	// MADDY -- Start
-	// 1. Invoke identifySubFeeder(subFeederId)
-	// 2. Check sfcmPanelRequestURI, sfcmPanelFactoryConfigURI.
-	// 3. Write failure function
-	// 4. Debug responses (as expected)
-	// 5. expression $sfcmPanelResponse.Config["On-Off"] syntax
-	// 6. expression isCTScaleNonZero ? sfcmCount++ : sfcmCount syntax
-    $scope.identifySubFeeder = function($objSFCM) {
-    	var sfcmPanelRequestURI = 'http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/'+$objSFCM.Id+'/';
-    	for (int panelId = 1; panelId <= 4; panelId++)
+	$rootScope.bcmCount = 0;
+	$rootScope.objPDU;
+    $rootScope.objBCM;
+    $rootScope.objSFCM;
+    //to identify SFCMs: START
+    /*$scope.identifySubFeeder = function(sfcmDevice) {
+    	for (var panelId = 1; panelId <= 4; panelId++)
     	{
-    		sfcmPanelRequestURI = sfcmPanelRequestURI.concat(panelId);
+    	var sfcmPanelRequestURI = 'http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/'+$rootScope.objSFCM.Id+'/'+panelId;
+    		//sfcmPanelRequestURI = sfcmPanelRequestURI.concat(panelId);
     		$http.get(sfcmPanelRequestURI)
     			.success(function(sfcmPanelResponse){
+                    $scope.sfcmPanelConfig = sfcmPanelResponse;
     				var isSFCMPanelOn = parseSFCMPanelResponseOnOff(sfcmPanelResponse);
-    				identifySubFeederOnCTScale($subFeederId, panelId);
-    			})
+    				identifySubFeederOnCTScale($rootScope.objSFCM.Id, panelId);
+    			}).catch(function (response){
+                    $scope.networkFailure=true;
+                });
     	}
     }
 
-    $scope.parseSFCMPanelResponseOnOff = function($sfcmPanelResponse) {
-    	return $sfcmPanelResponse.Config["On-Off"] === "On";
+    $scope.parseSFCMPanelResponseOnOff = function(sfcmPanelResponse) {
+    	return $scope.sfcmPanelConfig.Config["On-Off"] === "On";
     }
 
-    $scope.identifySubFeederOnCTScale = function($subFeederId, $sfcmPanelOnId) {
-		var sfcmPanelFactoryConfigURI = 'http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?SubfeedFactoryConfig/submeters/'+$subFeederId+'/'+$sfcmPanelOnId+'/';
-		for (int i = 1; i <= 14; i++)
+    $scope.identifySubFeederOnCTScale = function(objSFCM.Id, sfcmPanelOnId) {
+		for (var i = 1; i <= 14; i++)
 		{
-			sfcmPanelFactoryConfigURI = sfcmPanelFactoryConfigURI.concat(i);
+		var sfcmPanelFactoryConfigURI = 'http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?SubfeedFactoryConfig/submeters/'+$rootScope.objSFCM.Id+'/'+$scope.sfcmPanelOnId+'/'+i;
+			//sfcmPanelFactoryConfigURI = sfcmPanelFactoryConfigURI.concat(i);
 			$http.get(sfcmPanelFactoryConfigURI)
     			.success(function(sfcmPanelFactoryConfigResponse) {
     				var isCTScaleNonZero = parseSFCMPanelFactoryConfigResponse(sfcmPanelFactoryConfigResponse);
     				isCTScaleNonZero ? sfcmCount++ : sfcmCount;
-    			})
+    			}).catch(function (response){
+                    $scope.networkFailure=true;
+                });
 		}
 
 	}
 
     $scope.parseSFCMPanelFactoryConfigResponse = function($sfcmPanelFactoryConfigResponse) {
     	return $sfcmPanelFactoryConfigResponse.SubfeedFactoryConfig.LineCTScale != 0;
-    }
-
-    $scope.identifyBCM = function($bcmDevice)
-    {
-    	$http.get('http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/'+parseInt($bcmDevice.Id)+'/1')
-                                .success(function(response)
-                                {
-                                	console.log(response.PanelConfig.OnOff);
-                                }
-    }
-	// MADDY -- End
-
+    }*/
+    
+    //to identify SFCMs: END
+    
     //service or function to draw the SVG mimic: START
-    $scope.invokeDeviceStatusService = function()
-    {
+    $scope.invokeDeviceStatusService = function(){
 		$http.get('http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?devicestatus')
-			.success(function(response) 
-			{
+			.success(function(response) {
 				$scope.networkFailure=false;
 				$scope.deviceAvailable=true;
-				$rootScope.deviceStatusArr = response.devicestatus;
+				$scope.deviceStatusArr = response.devicestatus;
 				
-				$rootScope.objPDU;
-                $rootScope.objBCM;
-                $rootScope.objSFCM;
-				deviceStatusArr.forEach(function(device) 
+                
+                
+                angular.forEach($scope.deviceStatusArr,function(device, deviceValue) 
 				{
 					switch(device.Type)
 					{
@@ -574,85 +565,112 @@ app.controller('newHomeController', function ($scope, $http, $timeout, $location
 							$rootScope.objSFCM = device;
 							break;
 					}
+                    console.log($rootScope.objBCM);
+                    console.log($rootScope.objSFCM);
 				});
-			}
-		identifyBCM(objBCM);
-		identifySubFeeder(objSFCM);
-		}
-                /*for(var i = $rootScope.deviceStatusArr.length - 1; i >= 0; i--)
+            
+                //to identify BCMs: START
+                $scope.identifyBCM = function(bcmDevice)
+                {
+                    $scope.bcmDeviceId = parseInt($rootScope.objBCM.Id);
+                    for(var bcmPanelNo = 1;bcmPanelNo <= 4; bcmPanelNo++){
+                        
+                    $http.get('http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/'+$scope.bcmDeviceId+'/'+bcmPanelNo)
+                                            .success(function(response)
+                                            {
+                                                if(response.PanelConfig.OnOff === "On"){
+                                                   console.log(response.PanelConfig.OnOff);
+                                                   $rootScope.bcmCount++;
+                                                }
+                                            }).catch(function (response){
+                                                $scope.networkFailure=true;
+                                            });
+                    }
+                    console.log("No. of BCMs: "+$rootScope.bcmCount);
+                }
+                //to identify BCMs: END
+            
+                $scope.identifyBCM($rootScope.objBCM);
+		        //$scope.identifySubFeeder(objSFCM);
+                
+                /*for(var i = 0; i < $scope.deviceStatusArr.length; i++)
                 {
                     //$scope.element = $scope.deviceStatusArr[i];
-                    switch($rootScope.deviceStatusArr[i].Type)
+                    switch($scope.deviceStatusArr[i].Type)
                     {
                         case "PDU":
-                            $rootScope.objPDU = $rootScope.deviceStatusArr[i];
+                            $rootScope.objPDU = $scope.deviceStatusArr[i];
                             break;
                         case "BCM":
                             //$scope.objBCM.push($scope.element);
-                            
-                            $http.get('http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/'+parseInt($rootScope.deviceStatusArr[i].Id)+'/1')
-                                .success(function(response) {
-
-                                    if(response.PanelConfig.OnOff == 'On'){
-                                        response.PanelConfig.OnOff = true;
-                                        $rootScope.objBCM.push($rootScope.deviceStatusArr[i]);
+                            $scope.bcmPanelRequestUri1 = 'http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/' + parseInt($scope.deviceStatusArr[i].Id) + '/1';
+                            $scope.bcmPanelRequestUri2 = 'http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/' + parseInt($scope.deviceStatusArr[i].Id) + '/2';
+                            $scope.bcmPanelRequestUri3 = 'http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/' + parseInt($scope.deviceStatusArr[i].Id) + '/3';
+                            $scope.bcmPanelRequestUri4 = 'http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/' + parseInt($scope.deviceStatusArr[i].Id) + '/4';
+                            $http.get($scope.bcmPanelRequestUri1)
+                                .then(function(response1) {
+                                    $scope.bcmPanelConfig1 = response1.PanelConfig;
+                                    $scope.isOnOff = $scope.bcmPanelConfig1.OnOff; 
+                                    console.log("Value of Panel 1 is:"+$scope.isOnOff);
+                                    if($scope.isOnOff === 'true'){
+                                        $rootScope.bcmCount++;
+                                        //response1.PanelConfig.OnOff = true;
                                     }
                                     else{
-                                        response.PanelConfig.OnOff = false;
+                                        $scope.bcmPanelConfig1.OnOff = false;
                                     } 
-                                $http.get('http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/'+parseInt($rootScope.deviceStatusArr[i].Id)+'/2')
-                                .success(function(response) {
-
-                                    if(response.PanelConfig.OnOff == 'On'){
-                                        response.PanelConfig.OnOff = true;
-                                        $rootScope.objBCM.push($rootScope.deviceStatusArr[i]);
-                                    }
-                                    else{
-                                        response.PanelConfig.OnOff = false;
-                                    } 
-                                $http.get('http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/'+parseInt($rootScope.deviceStatusArr[i].Id)+'/3')
-                                .success(function(response) {
-
-                                    if(response.PanelConfig.OnOff == 'On'){
-                                        response.PanelConfig.OnOff = true;
-                                        $rootScope.objBCM.push($rootScope.deviceStatusArr[i]);
-                                    }
-                                    else{
-                                        response.PanelConfig.OnOff = false;
-                                    }
-                                $http.get('http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/'+parseInt($rootScope.deviceStatusArr[i].Id)+'/4')
-                                .success(function(response) {
-
-                                    if(response.PanelConfig.OnOff == 'On'){
-                                        response.PanelConfig.OnOff = true;
-                                        $rootScope.objBCM.push($rootScope.deviceStatusArr[i]);
-                                    }
-                                    else{
-                                        response.PanelConfig.OnOff = false;
-                                    }
-                                        }).catch(function (response){
-                                            $scope.networkFailure=true;
-                                        });
-                                    }).catch(function (response){
-                                        $scope.networkFailure=true;
-                                    });
-
-                                }).catch(function (response){
+                                    }).catch(function (response1){
                                     $scope.networkFailure=true;
                                 });
-                            }).catch(function (response){
-                                $scope.networkFailure=true;
-                            });
+                                $http.get($scope.bcmPanelRequestUri2)
+                                .then(function(response2) {
+
+                                    if(response2.PanelConfig.OnOff === 'On'){
+                                        response2.PanelConfig.OnOff = true;
+                                        $rootScope.bcmCount++;
+                                    }
+                                    else{
+                                        response2.PanelConfig.OnOff = false;
+                                    }
+                                    }).catch(function (response2){
+                                    $scope.networkFailure=true;
+                                });
+                                $http.get($scope.bcmPanelRequestUri3)
+                                .then(function(response3) {
+
+                                    if(response3.PanelConfig.OnOff === 'On'){
+                                        response3.PanelConfig.OnOff = true;
+                                        $rootScope.bcmCount++;
+                                    }
+                                    else{
+                                        response3.PanelConfig.OnOff = false;
+                                    }
+                                    }).catch(function (response3){
+                                        $scope.networkFailure=true;
+                                    });
+                                $http.get($scope.bcmPanelRequestUri4)
+                                .then(function(response4) {
+
+                                    if(response4.PanelConfig.OnOff === 'On'){
+                                        response4.PanelConfig.OnOff = true;
+                                        $rootScope.bcmCount++;
+                                    }
+                                    else{
+                                        response4.PanelConfig.OnOff = false;
+                                    }
+                                    }).catch(function (response4){
+                                        $scope.networkFailure=true;
+                                    });
                         //}
                         break;
                         case "SFCM":
-                            $rootScope.objSFCM.push($scope.element);
+                            $scope.objSFCM.push($scope.deviceStatusArr[i]);
                             break;
                     }
-                }
+                }*/
                 console.log("****** PDU ***** : "+$rootScope.objPDU["Type"]+", "+$scope.objPDU["load%"]);
-                console.log("****** BCM ***** : "+$rootScope.objBCM.length);
-                console.log("****** SFCM ***** : "+$rootScope.objSFCM.length);*/
+                //console.log("****** BCM ***** : "+$rootScope.bcmCount);
+                //console.log("****** SFCM ***** : "+$rootScope.objSFCM.length);
                 $scope.circuitContainer = $("#main-svg-container");
                 $scope.pduContainer = $("#pdu-container");
                 $scope.bsContainer = $("#bs-container");
@@ -985,7 +1003,7 @@ app.controller('newHomeController', function ($scope, $http, $timeout, $location
                     
                 }
                 //create PDU SVG START
-                if($rootScope.objBCM.length === 0 && $rootScope.objSFCM.length === 0){
+                if($rootScope.bcmCount === 0 && $rootScope.objSFCM.length === 0){
                   $scope.svg_pdu();  
                 }
                 else{
