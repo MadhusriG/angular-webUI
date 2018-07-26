@@ -502,8 +502,8 @@ app.controller('newHomeController', function ($scope, $http, $timeout, $location
 	// 4. Debug responses (as expected)
 	// 5. expression $sfcmPanelResponse.Config["On-Off"] syntax
 	// 6. expression isCTScaleNonZero ? sfcmCount++ : sfcmCount syntax
-    $scope.identifySubFeeder = function($subFeederId) {
-    	var sfcmPanelRequestURI = 'http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/'+$subFeederId+'/';
+    $scope.identifySubFeeder = function($objSFCM) {
+    	var sfcmPanelRequestURI = 'http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/'+$objSFCM.Id+'/';
     	for (int panelId = 1; panelId <= 4; panelId++)
     	{
     		sfcmPanelRequestURI = sfcmPanelRequestURI.concat(panelId);
@@ -537,20 +537,49 @@ app.controller('newHomeController', function ($scope, $http, $timeout, $location
     	return $sfcmPanelFactoryConfigResponse.SubfeedFactoryConfig.LineCTScale != 0;
     }
 
+    $scope.identifyBCM = function($bcmDevice)
+    {
+    	$http.get('http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?meters?PanelConfig/submeters/'+parseInt($bcmDevice.Id)+'/1')
+                                .success(function(response)
+                                {
+                                	console.log(response.PanelConfig.OnOff);
+                                }
+    }
 	// MADDY -- End
 
     //service or function to draw the SVG mimic: START
-    $scope.invokeDeviceStatusService = function(){
+    $scope.invokeDeviceStatusService = function()
+    {
 		$http.get('http://' + HOSTNAME + ':' + PORT + '/getdata.cgi?devicestatus')
-			.success(function(response) {
+			.success(function(response) 
+			{
 				$scope.networkFailure=false;
 				$scope.deviceAvailable=true;
 				$rootScope.deviceStatusArr = response.devicestatus;
 				
-                $rootScope.objPDU;
-                $rootScope.objBCM = [];
-                $rootScope.objSFCM = [];
-                for(var i = $rootScope.deviceStatusArr.length - 1; i >= 0; i--)
+				$rootScope.objPDU;
+                $rootScope.objBCM;
+                $rootScope.objSFCM;
+				deviceStatusArr.forEach(function(device) 
+				{
+					switch(device.Type)
+					{
+						case "PDU":
+							$rootScope.objPDU = device;
+							break;
+						case "BCM":
+							$rootScope.objBCM = device;
+							break;
+						case "SFCM":
+							$rootScope.objSFCM = device;
+							break;
+					}
+				});
+			}
+		identifyBCM(objBCM);
+		identifySubFeeder(objSFCM);
+		}
+                /*for(var i = $rootScope.deviceStatusArr.length - 1; i >= 0; i--)
                 {
                     //$scope.element = $scope.deviceStatusArr[i];
                     switch($rootScope.deviceStatusArr[i].Type)
@@ -623,7 +652,7 @@ app.controller('newHomeController', function ($scope, $http, $timeout, $location
                 }
                 console.log("****** PDU ***** : "+$rootScope.objPDU["Type"]+", "+$scope.objPDU["load%"]);
                 console.log("****** BCM ***** : "+$rootScope.objBCM.length);
-                console.log("****** SFCM ***** : "+$rootScope.objSFCM.length);
+                console.log("****** SFCM ***** : "+$rootScope.objSFCM.length);*/
                 $scope.circuitContainer = $("#main-svg-container");
                 $scope.pduContainer = $("#pdu-container");
                 $scope.bsContainer = $("#bs-container");
