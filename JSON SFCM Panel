@@ -1,5 +1,6 @@
 http://10.140.168.50/getdata.cgi?meters?SubfeedSystemData/submeters/24/2
 On-Off is ON
+
 {
 	"Config":	{
 		"On-Off":	"On",
@@ -16,5 +17,25 @@ On-Off is ON
 		"MajVersion":	3.00,
 		"MinVersion":	25.00,
 		"Baud":	"115200"
+	}
+}
+
+
+{
+	"Subfeed": {
+		"panelId": 1,
+		"finalSubfeed": [{
+				"subFeedId": 2,
+				"status": "alarm"
+			},
+			{
+				"subFeedId": 4,
+				"status": "alarm"
+			},
+			{
+				"subFeedId": 6,
+				"status": "alarm"
+			}
+		]
 	}
 }
