@@ -39,3 +39,16 @@ On-Off is ON
 		]
 	}
 }
+
+		$scope.subfeeds =   {"Subfeed":[]};
+		var subfeedObj = {
+		    "panelId": $scope.panelId
+		}
+		subfeedObj.finalSubfeed = [];
+		var subfeedIdStatus = {
+	      "subFeedId": $scope.subFeedId,
+	      "status": $scope.response.status
+	    };
+	    
+	    subfeedObj.finalSubfeed.push(subfeedIdStatus);
+	    $scope.subfeeds.push(subfeedObj);
