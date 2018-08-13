@@ -1,0 +1,38 @@
+Device
+:
+Array(3)
+0
+:
+deviceId
+:
+"24"
+devicePanelOn
+:
+Array(2)
+0
+:
+{PanelOnId: "2"}
+1
+:
+{PanelOnId: "4"}
+length
+:
+2
+__proto__
+:
+Array(0)
+deviceType
+:
+"SFCM"
+__proto__
+:
+Object
+1
+:
+{deviceType: "PDU", deviceId: "2", devicePanelOn: Array(0)}
+2
+:
+{deviceType: "BCM", deviceId: "7", devicePanelOn: Array(2)}
+length
+:
+3
