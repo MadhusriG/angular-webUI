@@ -46,8 +46,44 @@
 	<div class="card-layout" ng-if="networkFailure==true" style="text-align: center;color:red;">
 		Network Failure
 	</div>-->	
-    <div class="card-layout" ng-if="deviceConnected">		
-		<div class="card" ng-repeat="device in devices">
+    <div class="card-layout" ng-if="deviceConnected">
+        <div class="card">
+           <table class="table box-shadow">
+				<tbody>
+					<tr class="card-header">
+						<td class="device-type-left">
+							<div>
+								{{objPDU.Type}}
+							</div>
+						</td>
+						<td class="device-id-right">
+							<div class="deviceIdRight">
+								{{objPDU.Id}}
+							</div>
+						</td>
+					</tr>
+					<tr class="card-content">
+						<td class="loadPercentLeft">
+<!--							<div> -->
+                                <!--<canvas ng-if="showPie" width="90px" height="90px" id="pduPieChart" class="chart chart-doughnut mini-canvas" chart-options="optionspie" chart-data="datapie" chart-labels="labelspie" chart-colors="colorspie"></canvas>-->
+<!--                            </div>								-->
+						</td>
+						<td class="statusIconRight">
+							<div>
+								<div>
+									<a href="#/home"><img src="./images/icons/status/{{objPDU.devciestatus}}.png" /></a>
+								</div>
+								<br />
+								<div>
+									<a href="#/home"><img src="./images/icons/{{objPDU.Active}}.png" /></a>
+								</div>		
+							</div>	
+						</td>
+					</tr>
+				</tbody>				
+			</table> 
+        </div>
+		<div class="card" ng-repeat="device in devicesArr">
 			<table class="table box-shadow">
 				<tbody>
 					<tr class="card-header">
@@ -58,14 +94,14 @@
 						</td>
 						<td class="device-id-right">
 							<div class="deviceIdRight">
-								{{device.deviceId}}
+								{{device.deviceId}}/{{device.devicePanelOn.PanelOnId}}
 							</div>
 						</td>
 					</tr>
 					<tr class="card-content">
 						<!--<td class="loadPercentLeft">
 							<div>
-                                <canvas class="chart-bar bcm-chart-container mini-canvas" chart-options="options" chart-data="panelData1"  chart-labels="labelHarmonics" chart-colors="colorslabelHarmonics" chart-series="loadSeries" line-display = "lineDisplay"></canvas>
+                                <canvas class="chart-bar bcm-chart-container mini-canvas" chart-options="options" chart-data="panelData1"  chart-labels="labelHarmonics" chart-colors="colorslabelHarmonics" chart-series="loadSeries" line-display="lineDisplay"></canvas>
                             </div>								
 						</td>-->
 						<!--<td class="statusIconRight">
