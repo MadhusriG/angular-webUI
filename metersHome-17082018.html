@@ -1,0 +1,127 @@
+<div>	
+	<div class="header-layout clearfix"  style="border: #d8d8d8 1px solid; background: white; box-shadow: 0px 2px 5px #d8d8d8;">  
+		{{titleHeader}}
+	</div>
+    <!--<div class="card-layout" ng-if="deviceAvailable">		
+		<div class="card" ng-repeat="deviceStatus in deviceStatusAll" ng-click="singleDeviceSelect($event, $index)">	
+			<table class="table box-shadow">
+				<tbody>
+					<tr class="card-header">
+						<td class="device-type-left">
+							<div>
+								{{deviceStatus.Type}}
+							</div>
+						</td>
+						<td class="device-id-right">
+							<div class="deviceIdRight">
+								{{deviceStatus.Id}}
+							</div>
+						</td>
+					</tr>
+					<tr class="card-content">
+						<td class="loadPercentLeft">
+							<div>
+                                <canvas class="chart-bar bcm-chart-container mini-canvas" chart-options="options" chart-data="panelData1"  chart-labels="labelHarmonics" chart-colors="colorslabelHarmonics" chart-series="loadSeries" line-display = "lineDisplay"></canvas>
+                            </div>								
+						</td>
+						<td class="statusIconRight">
+							<div>
+								<div>
+									<a href="#/home"><img src="./images/icons/status/{{deviceStatus.devciestatus}}.png" /></a>
+								</div>
+								<br />
+								<div>
+									<a href="#/home"><img src="./images/icons/{{deviceStatus.Active}}.png" /></a>
+								</div>		
+							</div>	
+						</td>
+					</tr>
+				</tbody>				
+			</table>
+		</div>						
+	</div>
+	<div class="card-layout" ng-if="deviceStatusAll.length==0" style="text-align: center;">
+		No Device Connected
+	</div>	
+	<div class="card-layout" ng-if="networkFailure==true" style="text-align: center;color:red;">
+		Network Failure
+	</div>-->	
+    <div class="card-layout" ng-if="deviceConnected">
+        <div class="card">
+           <table class="table box-shadow">
+				<tbody>
+					<tr class="card-header">
+						<td class="device-type-left">
+							<div>
+								{{objPDU.Type}}
+							</div>
+						</td>
+						<td class="device-id-right">
+                            <div class="deviceIdRight">
+                                <a href="#"><img src="./images/icons/link-external-24.png" width="24" height="24"/></a>
+                            </div>
+						</td>
+					</tr>
+					<tr class="card-content">
+						<td class="loadPercentLeft">
+							<div> 
+                                <canvas ng-if="showPie" width="90px" height="90px" id="pduPieChartMeters" class="chart chart-doughnut mini-canvas" chart-options="optionspie" chart-data="datapie" chart-labels="labelspie" chart-colors="colorspie"></canvas>
+                            </div>								
+						</td>
+						<td class="statusIconRight">
+							<div>
+                                <div class="deviceIdRight">
+                                    {{objPDU.Id}}
+                                </div>
+								<div class="statusIcon">
+									<a href="#/home"><img src="./images/icons/status/{{objPDU.devciestatus}}.png" width="32" height="32"/></a>
+								</div>
+								<div class="statusIcon">
+									<a href="#/home"><img src="./images/icons/{{objPDU.Active}}.png" width="32" height="32"/></a>
+								</div>		
+							</div>	
+						</td>
+					</tr>
+				</tbody>				
+			</table> 
+        </div>
+		<div class="card" ng-repeat="device in devicesArr">
+			<table class="table box-shadow">
+				<tbody>
+					<tr class="card-header">
+						<td class="device-type-left">
+							<div>
+								{{device.deviceType}}
+							</div>
+						</td>
+                        <td class="device-id-right">
+                            <div class="deviceIdRight">
+                                <a href="#"><img src="./images/icons/link-external-24.png" width="24" height="24"/></a>
+                            </div>
+						</td>
+					</tr>
+					<tr class="card-content">
+						<td class="loadPercentLeft">
+							<div>
+                                <canvas class="chart chart-bar bcm-chart-container mini-canvas" chart-options="options" chart-data="panelData1" chart-labels="labelHarmonics" chart-series="loadSeries"></canvas>
+                            </div>								
+						</td>
+						<td class="statusIconRight">
+							<div>
+                                <div class="deviceIdRight">
+                                    {{device.deviceId}}/{{device.devicePanelOn.PanelOnId}}
+                                </div>
+								<div class="statusIcon">
+									<a href="#/home"><img src="./images/icons/status/AlarmIcon.png" width="32" height="32"/></a>
+								</div>
+								<div class="statusIcon">
+									<a href="#/home"><img src="./images/icons/{{device.deviceActive}}.png" width="32" height="32"/></a>
+								</div>		
+							</div>	
+						</td>
+					</tr>
+				</tbody>				
+			</table>
+		</div>						
+	</div>
+</div>
