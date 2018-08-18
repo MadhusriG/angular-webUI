@@ -103,7 +103,8 @@
 					<tr class="card-content">
 						<td class="loadPercentLeft">
 							<div>
-                                <canvas class="chart chart-bar bcm-chart-container mini-canvas" chart-options="options" chart-data="panelData1" chart-labels="labelHarmonics" chart-series="loadSeries"></canvas>
+                                <canvas class="chart chart-bar bcm-chart-container mini-canvas" ng-show="device.deviceType == 'BCM'" chart-options="options" chart-data="panelData1" chart-labels="labelHarmonicsBcm" chart-series="loadSeries" chart-colors="colorslabelHarmonics"></canvas>
+                                <!--<canvas class="chart chart-bar bcm-chart-container mini-canvas" ng-show="device.deviceType == 'SFCM'" chart-options="options" chart-data="panelData1" chart-labels="labelHarmonicsSfcm" chart-series="loadSeries"></canvas>-->
                             </div>								
 						</td>
 						<td class="statusIconRight">
